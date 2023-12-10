@@ -7,13 +7,13 @@ import (
 	pb "grpc-practice/calculator/proto"
 )
 
-func doCalc(c pb.CalculatorServiceClient) {
+func doCalc(c pb.CalculatorServiceClient, firstNum, secondNum int) {
 	log.Println("doCalc was invoked")
 
 	// Make the Calculate RPC call
 	req := &pb.CalculatorRequest{
-		FirstNum:  1,
-		SecondNum: 1,
+		FirstNum:  int32(firstNum),
+		SecondNum: int32(secondNum),
 	}
 
 	res, err := c.Calculate(context.Background(), req)
