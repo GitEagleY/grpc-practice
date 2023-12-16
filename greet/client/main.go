@@ -16,11 +16,10 @@ func main() {
 	if err != nil {
 		log.Fatalf("Did not connect: %v", err)
 	}
-	if err != nil {
-		log.Fatalf("Failed to listen: %v\n", err)
-	}
+
 	defer conn.Close()
-	log.Printf("Listening at %s\n", addr)
+
 	c := pb.NewGreetServiceClient(conn)
-	doGreet(c)
+	//doGreet(c)
+	doGreetManyTimes(c)
 }

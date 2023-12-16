@@ -17,4 +17,5 @@ message GreetResponce{
 
 service GreetService{
     rpc Greet (GreetRequest) returns (GreetResponce);
+    rpc GreetManyTimes(GreetRequest) returns (stream GreetResponce);
 }
