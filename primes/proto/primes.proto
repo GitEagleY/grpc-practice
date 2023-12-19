@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package primes;
+
+option go_package ="grpc-practice/primes/proto";
+
+message PrimeRequest{
+    int32 input=1;
+}
+
+message PrimeResponce{
+    int32 result=1;
+}
+
+
+service PrimeService{
+    rpc Calculate(PrimeRequest) returns (stream PrimeResponce);
+}

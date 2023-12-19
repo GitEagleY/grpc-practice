@@ -81,3 +81,8 @@ about: ## Display info related to the build
 # Target to show help
 help: ## Show this help
 	@${HELP_CMD}
+
+make_primes:
+	protoc -Iprimes/proto --go_opt=module=grpc-practice --go_out=. --go-grpc_opt=module=grpc-practice --go-grpc_out=. primes/proto/*.proto
+	go build -o bin/primes/server ./primes/server
+	go build -o bin/primes/client ./primes/client
