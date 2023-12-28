@@ -26,5 +26,4 @@ func (s *Server) LongGreet(stream pb.GreetService_LongGreetServer) error {
 		log.Printf("Recieving %v\n", req)
 		res += fmt.Sprintf("Hello %s!\n", req.FirstName)
 	}
-	return nil
 }
