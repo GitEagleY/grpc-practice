@@ -2,8 +2,13 @@ syntax = "proto3";
 
 package calculator;
 
+
+
 option go_package ="grpc-practice/calculator/proto";
+
 import "avg.proto";
+import "maxNum.proto";
+
 
 message CalculatorRequest{
     int32 first_num=1;
@@ -18,6 +23,7 @@ message CalculatorResponce{
 service CalculatorService{
     rpc Calculate (CalculatorRequest) returns (CalculatorResponce);
     rpc Avg(stream AvgRequest) returns (AvgResponce);
+    rpc Max(stream MaxRequest) returns (stream MaxResponce);
 }
 
 

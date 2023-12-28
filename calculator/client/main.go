@@ -43,7 +43,8 @@ func main() {
 	// Call doCalc with the gRPC client instance and user-provided numbers
 	doCalc(client, firstNum, secondNum)*/
 
-	doAvg(client)
+	//doAvg(client)
+	doMax(client)
 }
 
 func readUserInput(prompt string) (int, error) {

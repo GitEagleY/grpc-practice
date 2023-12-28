@@ -7,7 +7,7 @@ import (
 )
 
 func doAvg(c pb.CalculatorServiceClient) {
-	log.Println("doCalculations was invoked")
+	log.Println("doAvg was invoked")
 
 	stream, err := c.Avg(context.Background())
 
