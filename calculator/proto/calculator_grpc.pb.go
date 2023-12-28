@@ -23,6 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type CalculatorServiceClient interface {
 	Calculate(ctx context.Context, in *CalculatorRequest, opts ...grpc.CallOption) (*CalculatorResponce, error)
+	Avg(ctx context.Context, opts ...grpc.CallOption) (CalculatorService_AvgClient, error)
 }
 
 type calculatorServiceClient struct {
@@ -42,11 +43,46 @@ func (c *calculatorServiceClient) Calculate(ctx context.Context, in *CalculatorR
 	return out, nil
 }
 
+func (c *calculatorServiceClient) Avg(ctx context.Context, opts ...grpc.CallOption) (CalculatorService_AvgClient, error) {
+	stream, err := c.cc.NewStream(ctx, &CalculatorService_ServiceDesc.Streams[0], "/calculator.CalculatorService/Avg", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &calculatorServiceAvgClient{stream}
+	return x, nil
+}
+
+type CalculatorService_AvgClient interface {
+	Send(*AvgRequest) error
+	CloseAndRecv() (*AvgResponce, error)
+	grpc.ClientStream
+}
+
+type calculatorServiceAvgClient struct {
+	grpc.ClientStream
+}
+
+func (x *calculatorServiceAvgClient) Send(m *AvgRequest) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *calculatorServiceAvgClient) CloseAndRecv() (*AvgResponce, error) {
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	m := new(AvgResponce)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // CalculatorServiceServer is the server API for CalculatorService service.
 // All implementations must embed UnimplementedCalculatorServiceServer
 // for forward compatibility
 type CalculatorServiceServer interface {
 	Calculate(context.Context, *CalculatorRequest) (*CalculatorResponce, error)
+	Avg(CalculatorService_AvgServer) error
 	mustEmbedUnimplementedCalculatorServiceServer()
 }
 
@@ -56,6 +92,9 @@ type UnimplementedCalculatorServiceServer struct {
 
 func (UnimplementedCalculatorServiceServer) Calculate(context.Context, *CalculatorRequest) (*CalculatorResponce, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Calculate not implemented")
+}
+func (UnimplementedCalculatorServiceServer) Avg(CalculatorService_AvgServer) error {
+	return status.Errorf(codes.Unimplemented, "method Avg not implemented")
 }
 func (UnimplementedCalculatorServiceServer) mustEmbedUnimplementedCalculatorServiceServer() {}
 
@@ -88,6 +127,32 @@ func _CalculatorService_Calculate_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CalculatorService_Avg_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(CalculatorServiceServer).Avg(&calculatorServiceAvgServer{stream})
+}
+
+type CalculatorService_AvgServer interface {
+	SendAndClose(*AvgResponce) error
+	Recv() (*AvgRequest, error)
+	grpc.ServerStream
+}
+
+type calculatorServiceAvgServer struct {
+	grpc.ServerStream
+}
+
+func (x *calculatorServiceAvgServer) SendAndClose(m *AvgResponce) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *calculatorServiceAvgServer) Recv() (*AvgRequest, error) {
+	m := new(AvgRequest)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // CalculatorService_ServiceDesc is the grpc.ServiceDesc for CalculatorService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -100,6 +165,12 @@ var CalculatorService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _CalculatorService_Calculate_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "Avg",
+			Handler:       _CalculatorService_Avg_Handler,
+			ClientStreams: true,
+		},
+	},
 	Metadata: "calculator.proto",
 }

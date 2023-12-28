@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package calculator;
+
+option go_package ="grpc-practice/calculator/proto";
+
+message AvgRequest{
+int32 num=1;
+}
+
+message AvgResponce{
+    double resilt=1;
+}

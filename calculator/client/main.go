@@ -26,7 +26,7 @@ func main() {
 
 	client := pb.NewCalculatorServiceClient(conn)
 
-	// Read user input for the first number
+	/* Read user input for the first number
 	firstNum, err := readUserInput("Enter the first number: ")
 	if err != nil {
 		log.Fatalf("Error reading the first number: %v", err)
@@ -41,7 +41,9 @@ func main() {
 	}
 
 	// Call doCalc with the gRPC client instance and user-provided numbers
-	doCalc(client, firstNum, secondNum)
+	doCalc(client, firstNum, secondNum)*/
+
+	doAvg(client)
 }
 
 func readUserInput(prompt string) (int, error) {
