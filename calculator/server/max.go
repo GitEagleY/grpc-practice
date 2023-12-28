@@ -15,6 +15,7 @@ func (s *calculatorServer) Max(stream pb.CalculatorService_MaxServer) error {
 		req, err := stream.Recv()
 		if err == io.EOF {
 			stream.Send(&pb.MaxResponce{Result: float64(currntNum)})
+			log.Printf("sended max: %v\n", currntNum)
 			stream.Context().Done()
 			return nil
 		}
@@ -25,7 +26,8 @@ func (s *calculatorServer) Max(stream pb.CalculatorService_MaxServer) error {
 		log.Printf("recieved number:%d\n", NewNum)
 		if NewNum > currntNum {
 			currntNum = NewNum
-			//stream.Send(&pb.MaxResponce{Result: float64(currntNum)})
+			stream.Send(&pb.MaxResponce{Result: float64(currntNum)})
+			log.Printf("sended new max: %v\n", currntNum)
 		}
 	}
 }
