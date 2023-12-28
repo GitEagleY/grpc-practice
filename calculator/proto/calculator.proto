@@ -8,7 +8,7 @@ option go_package ="grpc-practice/calculator/proto";
 
 import "avg.proto";
 import "maxNum.proto";
-
+import "sqrt.proto";
 
 message CalculatorRequest{
     int32 first_num=1;
@@ -24,6 +24,7 @@ service CalculatorService{
     rpc Calculate (CalculatorRequest) returns (CalculatorResponce);
     rpc Avg(stream AvgRequest) returns (AvgResponce);
     rpc Max(stream MaxRequest) returns (stream MaxResponce);
+    rpc Sqrt(SqrtRequest) returns (SqrtResponce);
 }
 
 

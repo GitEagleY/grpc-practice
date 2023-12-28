@@ -44,7 +44,8 @@ func main() {
 	doCalc(client, firstNum, secondNum)*/
 
 	//doAvg(client)
-	doMax(client)
+	//doMax(client)
+	doSqrt(client, int32(4))
 }
 
 func readUserInput(prompt string) (int, error) {
